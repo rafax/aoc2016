@@ -1,4 +1,4 @@
-package utils
+package aoc2016
 
 import "testing"
 

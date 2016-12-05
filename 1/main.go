@@ -29,7 +29,7 @@ func endPos(in string) (int, int) {
 	visited := map[[2]int]bool{}
 	moves := strings.Split(in, ", ")
 	x, y := 0, 0
-	dir := T
+	dir := ao
 	for _, m := range moves {
 		if m[0] == 'R' {
 			dir = dir.TurnRight()
@@ -57,27 +57,4 @@ func endPos(in string) (int, int) {
 
 	}
 	return x, y
-}
-
-type Direction int
-
-const (
-	T Direction = iota
-	R Direction = 1
-	D Direction = 2
-	L Direction = 3
-)
-
-func (d Direction) TurnRight() Direction {
-	if d == L {
-		return T
-	}
-	return d + 1
-}
-
-func (d Direction) TurnLeft() Direction {
-	if d == T {
-		return L
-	}
-	return d - 1
 }
