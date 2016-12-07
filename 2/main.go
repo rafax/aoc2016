@@ -16,6 +16,14 @@ type key struct {
 var keyboard1 = [][]*key{[]*key{nil, nil, nil, nil, nil}, []*key{nil, &key{"1"}, &key{"2"}, &key{"3"}, nil},
 	[]*key{nil, &key{"4"}, &key{"5"}, &key{"6"}, nil}, []*key{nil, &key{"7"}, &key{"8"}, &key{"9"}, nil}, []*key{nil, nil, nil, nil, nil}}
 
+var keyboard2 = [][]*key{[]*key{nil, nil, nil, nil, nil, nil, nil},
+	[]*key{nil, nil, nil, &key{"1"}, nil, nil, nil},
+	[]*key{nil, nil, &key{"2"}, &key{"3"}, &key{"4"}, nil, nil},
+	[]*key{nil, &key{"5"}, &key{"6"}, &key{"7"}, &key{"8"}, &key{"9"}, nil},
+	[]*key{nil, nil, &key{"A"}, &key{"B"}, &key{"C"}, nil, nil},
+	[]*key{nil, nil, nil, &key{"D"}, nil, nil, nil},
+	[]*key{nil, nil, nil, nil, nil, nil, nil}}
+
 type Position struct {
 	x, y     int
 	keyboard [][]*key
