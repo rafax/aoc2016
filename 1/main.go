@@ -8,6 +8,8 @@ import (
 	"os"
 	"strconv"
 	"strings"
+
+	aoc "github.com/rafax/aoc2016"
 )
 
 func main() {
@@ -29,7 +31,7 @@ func endPos(in string) (int, int) {
 	visited := map[[2]int]bool{}
 	moves := strings.Split(in, ", ")
 	x, y := 0, 0
-	dir := ao
+	dir := aoc.U
 	for _, m := range moves {
 		if m[0] == 'R' {
 			dir = dir.TurnRight()
@@ -39,13 +41,13 @@ func endPos(in string) (int, int) {
 		steps, _ := strconv.Atoi(string(m[1:]))
 		for i := 0; i < steps; i++ {
 			switch dir {
-			case T:
+			case aoc.U:
 				y--
-			case R:
+			case aoc.R:
 				x++
-			case D:
+			case aoc.D:
 				y++
-			case L:
+			case aoc.L:
 				x--
 			}
 			if _, ok := visited[[2]int{x, y}]; !ok {
