@@ -13,30 +13,31 @@ type key struct {
 	string
 }
 
-var keyboard = [][]*key{[]*key{nil, nil, nil, nil, nil}, []*key{nil, &key{"1"}, &key{"2"}, &key{"3"}, nil},
+var keyboard1 = [][]*key{[]*key{nil, nil, nil, nil, nil}, []*key{nil, &key{"1"}, &key{"2"}, &key{"3"}, nil},
 	[]*key{nil, &key{"4"}, &key{"5"}, &key{"6"}, nil}, []*key{nil, &key{"7"}, &key{"8"}, &key{"9"}, nil}, []*key{nil, nil, nil, nil, nil}}
 
 type Position struct {
-	x, y int
+	x, y     int
+	keyboard [][]*key
 }
 
 func (p Position) Move(d aoc.Direction) Position {
 	switch d {
 	case aoc.U:
-		if keyboard[p.x][p.y-1] != nil {
-			return Position{p.x, p.y - 1}
+		if p.keyboard[p.x][p.y-1] != nil {
+			return Position{p.x, p.y - 1, p.keyboard}
 		}
 	case aoc.R:
-		if keyboard[p.x+1][p.y] != nil {
-			return Position{p.x + 1, p.y}
+		if p.keyboard[p.x+1][p.y] != nil {
+			return Position{p.x + 1, p.y, p.keyboard}
 		}
 	case aoc.D:
-		if keyboard[p.x][p.y+1] != nil {
-			return Position{p.x, p.y + 1}
+		if p.keyboard[p.x][p.y+1] != nil {
+			return Position{p.x, p.y + 1, p.keyboard}
 		}
 	case aoc.L:
-		if keyboard[p.x-1][p.y] != nil {
-			return Position{p.x - 1, p.y}
+		if p.keyboard[p.x-1][p.y] != nil {
+			return Position{p.x - 1, p.y, p.keyboard}
 		}
 	default:
 		panic("Unrecognized direction" + string(d))
@@ -45,7 +46,7 @@ func (p Position) Move(d aoc.Direction) Position {
 }
 
 func (p Position) Key() string {
-	return keyboard[p.y][p.x].string
+	return p.keyboard[p.y][p.x].string
 }
 
 func main() {
@@ -56,7 +57,7 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	pos := Position{x: 2, y: 2}
+	pos := Position{x: 2, y: 2, keyboard: keyboard1}
 	for scanner.Scan() {
 		dir := scanner.Text()
 		for _, in := range dir {
