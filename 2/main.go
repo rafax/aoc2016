@@ -5,46 +5,47 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 
 	aoc "github.com/rafax/aoc2016"
 )
 
-var keyboard = []string{"1", "2", "3", "4", "5", "6", "7", "8", "9"}
+type key struct {
+	string
+}
+
+var keyboard = [][]*key{[]*key{nil, nil, nil, nil, nil}, []*key{nil, &key{"1"}, &key{"2"}, &key{"3"}, nil},
+	[]*key{nil, &key{"4"}, &key{"5"}, &key{"6"}, nil}, []*key{nil, &key{"7"}, &key{"8"}, &key{"9"}, nil}, []*key{nil, nil, nil, nil, nil}}
 
 type Position struct {
-	pos int
+	x, y int
 }
 
 func (p Position) Move(d aoc.Direction) Position {
 	switch d {
 	case aoc.U:
-		if p.pos < 3 {
-			return p
+		if keyboard[p.x][p.y-1] != nil {
+			return Position{p.x, p.y - 1}
 		}
-		return Position{p.pos - 3}
 	case aoc.R:
-		if p.pos == 2 || p.pos == 5 || p.pos == 8 {
-			return p
+		if keyboard[p.x+1][p.y] != nil {
+			return Position{p.x + 1, p.y}
 		}
-		return Position{p.pos + 1}
 	case aoc.D:
-		if p.pos > 5 {
-			return p
+		if keyboard[p.x][p.y+1] != nil {
+			return Position{p.x, p.y + 1}
 		}
-		return Position{p.pos + 3}
 	case aoc.L:
-		if p.pos == 0 || p.pos == 3 || p.pos == 6 {
-			return p
+		if keyboard[p.x-1][p.y] != nil {
+			return Position{p.x - 1, p.y}
 		}
-		return Position{p.pos - 1}
 	default:
 		panic("Unrecognized direction" + string(d))
 	}
+	return p
 }
 
 func (p Position) Key() string {
-	return strconv.Itoa(p.pos + 1)
+	return keyboard[p.y][p.x].string
 }
 
 func main() {
@@ -55,7 +56,7 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	pos := Position{pos: 4}
+	pos := Position{x: 2, y: 2}
 	for scanner.Scan() {
 		dir := scanner.Text()
 		for _, in := range dir {
