@@ -65,7 +65,7 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	pos := Position{x: 2, y: 2, keyboard: keyboard1}
+	pos := Position{x: 1, y: 3, keyboard: keyboard2}
 	for scanner.Scan() {
 		dir := scanner.Text()
 		for _, in := range dir {
