@@ -3,8 +3,8 @@ package aoc2016
 import "testing"
 
 var (
-	right = [][2]Direction{[2]Direction{T, R}, [2]Direction{R, D}, [2]Direction{D, L}, [2]Direction{L, T}}
-	left  = [][2]Direction{[2]Direction{T, L}, [2]Direction{L, D}, [2]Direction{D, R}, [2]Direction{R, T}}
+	right = [][2]Direction{[2]Direction{U, R}, [2]Direction{R, D}, [2]Direction{D, L}, [2]Direction{L, U}}
+	left  = [][2]Direction{[2]Direction{U, L}, [2]Direction{L, D}, [2]Direction{D, R}, [2]Direction{R, U}}
 )
 
 func TestTurnRight(t *testing.T) {
