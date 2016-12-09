@@ -32,13 +32,7 @@ func part1(scanner *bufio.Scanner) int {
 	for scanner.Scan() {
 		in := scanner.Text()
 		sstr := strings.Split(in, " ")
-		sides := []int{}
-		for _, s := range sstr {
-			side, _ := strconv.Atoi(s)
-			sides = append(sides, side)
-		}
-		sort.Ints(sides)
-		if sides[0]+sides[1] > sides[2] {
+		if isTriangle(sstr) {
 			cnt++
 		}
 	}
@@ -46,18 +40,29 @@ func part1(scanner *bufio.Scanner) int {
 }
 func part2(scanner *bufio.Scanner) int {
 	cnt := 0
+	lines := [][]string{}
 	for scanner.Scan() {
-		in := scanner.Text()
-		sstr := strings.Split(in, " ")
-		sides := []int{}
-		for _, s := range sstr {
-			side, _ := strconv.Atoi(s)
-			sides = append(sides, side)
-		}
-		sort.Ints(sides)
-		if sides[0]+sides[1] > sides[2] {
+		lines = append(lines, strings.Split(scanner.Text(), " "))
+	}
+	for i := 0; i < len(lines)*3; {
+		if isTriangle([]string{lines[i/3][i%3], lines[(i/3)+1][i%3], lines[(i/3)+2][i%3]}) {
 			cnt++
+		}
+		if i%3 == 2 {
+			i += 7
+		} else {
+			i++
 		}
 	}
 	return cnt
+}
+
+func isTriangle(sstr []string) bool {
+	sides := []int{}
+	for _, s := range sstr {
+		side, _ := strconv.Atoi(s)
+		sides = append(sides, side)
+	}
+	sort.Ints(sides)
+	return sides[0]+sides[1] > sides[2]
 }
