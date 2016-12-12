@@ -18,12 +18,15 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-	// var pos Position
-	// if os.Getenv("PART") == "1" {
-	// 	pos = Position{x: 2, y: 2, keyboard: keyboard1}
-	// } else {
-	// 	pos = Position{x: 1, y: 3, keyboard: keyboard2}
-	// }
+	if os.Getenv("PART") == "1" {
+		part1(scanner)
+	} else {
+		part2(scanner)
+	}
+
+}
+
+func part1(scanner *bufio.Scanner) {
 	sum := 0
 	for scanner.Scan() {
 		res := scanner.Text()
@@ -35,10 +38,19 @@ func main() {
 	fmt.Println(sum)
 }
 
+func part2(scanner *bufio.Scanner) {
+	for scanner.Scan() {
+		res := scanner.Text()
+		r := parseRoom(res)
+		fmt.Printf("%v -> %v\n", shift(r.name, r.sectorID), r.sectorID)
+	}
+}
+
 type room struct {
 	counts   map[rune]int
 	sectorID int
 	checksum string
+	name     string
 }
 
 type pair struct {
@@ -76,5 +88,27 @@ func parseRoom(in string) room {
 	}
 	end := strings.Split(parts[len(parts)-1], "[")
 	id, _ := strconv.Atoi(end[0])
-	return room{counts: cnt, sectorID: id, checksum: end[1][:len(end[1])-1]}
+	return room{counts: cnt, sectorID: id, checksum: end[1][:len(end[1])-1], name: strings.Join(parts[:len(parts)-1], "-")}
+}
+
+const (
+	start       = 'a'
+	end         = 'z'
+	letterCount = 26
+)
+
+func shift(in string, shiftBy int) string {
+	mod := shiftBy % letterCount
+	res := []byte(strings.Replace(in, "-", " ", -1))
+	for i, l := range res {
+		if l == ' ' {
+			continue
+		}
+		if int(l)+mod > end {
+			res[i] = byte(int(l) - letterCount + mod)
+		} else {
+			res[i] = byte(int(l) + mod)
+		}
+	}
+	return string(res)
 }
