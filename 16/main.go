@@ -9,7 +9,7 @@ import (
 func main() {
 	var res string
 	if os.Getenv("PART") != "1" {
-		res = part1("10000", 20)
+		res = part1("01110110101001000", 35651584)
 	} else {
 		res = part2("ffykfhsq")
 	}
@@ -17,41 +17,36 @@ func main() {
 }
 
 func part1(prefix string, limit int) string {
-	tot := initialize(prefix, limit)
-	fillDisk(tot, limit, len(prefix))
-	return checksum(*tot)
+	tot := initialize(prefix)
+	tot = fillDisk(tot, limit)
+	return checksum(tot)
 }
 func part2(prefix string) string { return "" }
 
-func initialize(prefix string, limit int) *[]bool {
-	tot := make([]bool, limit)
+func initialize(prefix string) []bool {
+	tot := make([]bool, len(prefix))
 	for i, l := range prefix {
 		if l == '1' {
 			tot[i] = true
 		}
 	}
-	return &tot
+	// fmt.Printf("Initialized %v to %v\n", prefix, tot)
+	return tot
 }
 
-func fillDisk(tot *[]bool, limit, init int) {
-	//fmt.Println("Starting fill with ", *tot, limit, init)
-	offset := init
-	width := init
-	for {
-		for i := 0; i < width; i++ {
-			//	fmt.Printf("Step(%v) with %v: l:%v off:%v w:%v\n", i, *tot, limit, offset, width)
-			if offset+i+1 >= limit {
-				return
-			}
-			(*tot)[offset+i+1] = !(*tot)[offset-1-i]
+func fillDisk(tot []bool, limit int) []bool {
+	for len(tot) < limit {
+		rev := make([]bool, len(tot))
+		for i := 0; i < len(tot); i++ {
+			rev[len(tot)-1-i] = !tot[i]
 		}
-		width = 2*width + 1
+		tot = append(append(tot, false), rev...)
 	}
+	return tot[:limit]
 }
 
 func checksum(in []bool) string {
-	limit := len(in)
-	for limit%2 == 0 {
+	for len(in)%2 == 0 {
 		for i := 0; i < len(in)-1; i += 2 {
 			if in[i] == in[i+1] {
 				in[i/2] = true
@@ -59,9 +54,9 @@ func checksum(in []bool) string {
 				in[i/2] = false
 			}
 		}
-		limit /= 2
+		in = in[:len(in)/2]
 	}
-	return print(in[:limit])
+	return print(in)
 }
 
 func print(in []bool) string {

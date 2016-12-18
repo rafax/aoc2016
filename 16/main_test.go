@@ -6,7 +6,7 @@ var checkCases = []testcase{testcase{"110010110100", "100"}, testcase{"100000111
 
 func TestChecksum(t *testing.T) {
 	for _, c := range checkCases {
-		res := checksum(*initialize(c.input, len(c.input)))
+		res := checksum(initialize(c.input))
 		if res != c.expected {
 			t.Errorf("Expected %v got %v", c.expected, res)
 		}
@@ -25,10 +25,10 @@ var fillCases = []testcase{testcase{"1", "100"}, testcase{"0", "001"},
 func TestFilling1Step(t *testing.T) {
 	for _, c := range fillCases {
 		limit := len(c.input)*2 + 1
-		tot := initialize(c.input, limit)
-		fillDisk(tot, limit, len(c.input))
-		if print(*tot) != c.expected {
-			t.Errorf("Expected %v got %v", c.expected, print(*tot))
+		tot := initialize(c.input)
+		tot = fillDisk(tot, limit)
+		if print(tot) != c.expected {
+			t.Errorf("Expected %v got %v", c.expected, print(tot))
 		}
 	}
 }
