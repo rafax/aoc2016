@@ -8,15 +8,15 @@ import (
 
 func main() {
 	var res string
-	if os.Getenv("PART") != "1" {
-		res = part1("01110110101001000", 35651584)
+	if os.Getenv("PART") == "1" {
+		res = solve("01110110101001000", 272)
 	} else {
-		res = part2("ffykfhsq")
+		res = solve("01110110101001000", 35651584)
 	}
 	fmt.Println(res)
 }
 
-func part1(prefix string, limit int) string {
+func solve(prefix string, limit int) string {
 	tot := initialize(prefix)
 	tot = fillDisk(tot, limit)
 	return checksum(tot)
