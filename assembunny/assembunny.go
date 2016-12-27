@@ -17,6 +17,10 @@ func (c *Computer) GetRegister(r string) int {
 	return c.registers[r]
 }
 
+func (c *Computer) SetRegister(r string, v int) {
+	c.registers[r] = v
+}
+
 func NewComputer() Computer {
 	return Computer{registers: map[string]int{"a": 0, "b": 0, "c": 0, "d": 0}}
 }

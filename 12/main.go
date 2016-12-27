@@ -17,18 +17,26 @@ func main() {
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
-
-	if os.Getenv("PART") != "1" {
-		fmt.Println(solve1(scanner))
-	}
-}
-
-func solve1(scanner *bufio.Scanner) int {
 	p := []assembunny.Instruction{}
 	for scanner.Scan() {
 		p = append(p, assembunny.ParseInstruction(scanner.Text()))
 	}
+	if os.Getenv("PART") != "1" {
+		fmt.Println(solve1(p))
+	} else {
+		fmt.Println(solve2(p))
+	}
+}
+
+func solve1(p assembunny.Program) int {
 	c := assembunny.NewComputer()
+	c.Execute(p)
+	return c.GetRegister("a")
+}
+
+func solve2(p assembunny.Program) int {
+	c := assembunny.NewComputer()
+	c.SetRegister("c", 1)
 	c.Execute(p)
 	return c.GetRegister("a")
 }
