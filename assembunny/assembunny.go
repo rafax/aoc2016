@@ -1,11 +1,20 @@
 package assembunny
 
+import (
+	"strconv"
+	"strings"
+)
+
 type Instruction interface {
 	execute(c *Computer, i *int)
 }
 
 type Computer struct {
 	registers map[string]int
+}
+
+func (c *Computer) GetRegister(r string) int {
+	return c.registers[r]
 }
 
 func NewComputer() Computer {
@@ -36,7 +45,7 @@ type dec struct {
 }
 
 type jnz struct {
-	target string
+	cond   string
 	jumpBy int
 }
 
@@ -49,7 +58,7 @@ func (d dec) execute(computer *Computer, _ *int) {
 }
 
 func (j jnz) execute(computer *Computer, jumpBy *int) {
-	if computer.registers[j.target] == 0 {
+	if (isRegister(j.cond) && computer.registers[j.cond] == 0) || j.cond == "0" {
 		return
 	}
 	*jumpBy = j.jumpBy
@@ -63,6 +72,33 @@ func (c cpy) execute(computer *Computer, _ *int) {
 	computer.registers[c.target] = v
 }
 
+func isRegister(v string) bool {
+	return strings.Contains("abcd", v)
+}
+
 func ParseInstruction(in string) Instruction {
-	return cpy{}
+	parts := strings.SplitN(in, " ", 3)
+	switch parts[0] {
+	case "cpy":
+		if isRegister(parts[1]) {
+			return cpy{from: parts[1], target: parts[2]}
+		}
+		v, err := strconv.Atoi(parts[1])
+		if err != nil {
+			panic(err)
+		}
+		return cpy{val: v, target: parts[2]}
+	case "inc":
+		return inc{target: parts[1]}
+	case "dec":
+		return dec{target: parts[1]}
+	case "jnz":
+		jb, err := strconv.Atoi(parts[2])
+		if err != nil {
+			panic(err)
+		}
+		return jnz{cond: parts[1], jumpBy: jb}
+	default:
+		panic("Unknown instruction " + in)
+	}
 }
